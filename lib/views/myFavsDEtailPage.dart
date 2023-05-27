@@ -1,7 +1,6 @@
 import 'package:campusgoo/utility/color.dart';
 import 'package:campusgoo/views/ads.dart';
 import 'package:campusgoo/views/urunDetayMesaj.dart';
-import 'package:campusgoo/views/urunDetayMesajlasma.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
