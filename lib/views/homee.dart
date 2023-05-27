@@ -61,6 +61,7 @@ class _homePageState extends State<homePage> {
       body: Column(
         children: [
           SizedBox(height: 130, child: category()),
+          Divider(thickness: 3,),
           Expanded(child: allAds()),
         ],
       ),
