@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "388959458855",
+    "project_id": "campusgoo-a0973",
+    "storage_bucket": "campusgoo-a0973.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388959458855:android:6be4fa0984bfc31bb1e002",
+        "android_client_info": {
+          "package_name": "com.example.campusgoo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCuYEJ5DKCjqQpnQXozXhFiQ-urnGxRmo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
