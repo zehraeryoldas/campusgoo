@@ -1,8 +1,5 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
-
-
-import 'package:campusgoo/views/Conversation.dart';
 import 'package:campusgoo/views/ads.dart';
 import 'package:campusgoo/views/conversationn.dart';
 import 'package:campusgoo/views/homee.dart';
@@ -36,7 +33,6 @@ class _AnaSayfaState extends State<Arayuz> {
       const profilePagee(),
     ];
   }
-  
 
   @override
   Widget build(BuildContext context) {
