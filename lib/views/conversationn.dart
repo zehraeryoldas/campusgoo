@@ -25,7 +25,7 @@ class _ConversationState extends State<Conversation> {
     .where("senderId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
     .snapshots();*/
 
-  final Stream<QuerySnapshot> stream = FirebaseFirestore.instance.collection('chats').where('users',arrayContains: FirebaseAuth.instance.currentUser!.uid).snapshots();
+  final Stream<QuerySnapshot> stream = FirebaseFirestore.instance.collection('chat_rooms').where('users',arrayContains: FirebaseAuth.instance.currentUser!.uid).snapshots();
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +122,7 @@ class _ConversationState extends State<Conversation> {
                                   resim: images.toString(),
                                   product_name: product_name.toString(),
                                   user: senderId.toString(),
+                                  roomId: data.id,
                                 ),
                               ),
                             );

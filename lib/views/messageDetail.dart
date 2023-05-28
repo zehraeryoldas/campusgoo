@@ -19,6 +19,7 @@ class MessageDetail extends StatefulWidget {
     this.name,
     this.product_name,
     this.userId,
+    required this.roomId,
   });
   final String? postId;
   final String? postUserId;
@@ -27,6 +28,7 @@ class MessageDetail extends StatefulWidget {
   final String? name;
   final String? product_name;
   final String? userId;
+  final String roomId;
 
   @override
   State<MessageDetail> createState() => _MessageDetailState();
@@ -70,7 +72,7 @@ class _MessageDetailState extends State<MessageDetail> {
       if (snapshot.exists) {
         //kullanıcının adının firebase veritabanında bulunup bulunmadığını kontrol etmek için kullanılır
         String username = snapshot.data()!['name'];
-        FirebaseFirestore.instance.collection('chats').add({
+        FirebaseFirestore.instance.collection('chat_rooms').add({
           'message': text,
           'timeStamp': DateTime.now(),
           'senderId': user,
@@ -97,6 +99,33 @@ class _MessageDetailState extends State<MessageDetail> {
     });
   }
 
+    Future<void> sendTextMessage(String roomId, String message) async {
+    var data = <String,dynamic>{
+      'from' : FirebaseAuth.instance.currentUser!.uid,
+      'to' : widget.postUserId,
+      'message' : message,
+      'message_type' : '0',
+      'isSeenFrom' : true,
+      'isSeenTo' : false,
+      'date' : DateTime.now(),
+    };
+    FirebaseFirestore.instance.collection('chat_rooms').doc(widget.roomId).collection('messages').add(data);
+
+  }
+
+  
+  late String room_id;
+  final Stream<QuerySnapshot> chatStream = FirebaseFirestore.instance.collection('chat_rooms').doc(room_id).collection('messages').orderBy('date', descending: true).snapshots();
+ @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    room_id= widget.roomId;
+    //uygulama ilk açıldığında
+    //kurulum fonksiyonunu gerçekleştiriyoruz.
+    // Bununla işlerimizi halledebiliyoruz.
+    // androidKurulum();
+  }
   void messageRemoved() {
     FirebaseFirestore.instance
         .collection("chats")
@@ -133,15 +162,7 @@ class _MessageDetailState extends State<MessageDetail> {
     }
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    //uygulama ilk açıldığında
-    //kurulum fonksiyonunu gerçekleştiriyoruz.
-    // Bununla işlerimizi halledebiliyoruz.
-    // androidKurulum();
-  }
+ 
 
   Future<void> bildirimGoster(String message) async {
     var androidBildirimDetay = const AndroidNotificationDetails(

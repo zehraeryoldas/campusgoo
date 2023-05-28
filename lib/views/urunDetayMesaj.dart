@@ -75,7 +75,7 @@ class _urunDetayMesajlasmaState extends State<urunDetayMesajlasma> {
       .then((snapshot) {
     if (snapshot.exists) {
       String username = snapshot.data()!['name'];
-      FirebaseFirestore.instance.collection('chats').add({
+      FirebaseFirestore.instance.collection('chat_rooms').add({
         'message': text,
         'timeStamp': DateTime.now(),
         'senderId': user,
@@ -86,6 +86,7 @@ class _urunDetayMesajlasmaState extends State<urunDetayMesajlasma> {
         'images': widget.resim,
         'users': [widget.postUserId, user],
       }).then((value) {
+        sendTextMessage(value.id,messageController.text,);
         messageController.text = '';
         bildirimGoster(text);
       }).catchError((error) {
@@ -98,6 +99,19 @@ class _urunDetayMesajlasmaState extends State<urunDetayMesajlasma> {
     print('Kullanıcı adını alma hatası: $error');
   });
 }
+  Future<void> sendTextMessage(String roomId, String message) async {
+    var data = <String,dynamic>{
+      'from' : FirebaseAuth.instance.currentUser!.uid,
+      'to' : widget.postUserId,
+      'message' : message,
+      'message_type' : '0',
+      'isSeenFrom' : true,
+      'isSeenTo' : false,
+      'date' : DateTime.now(),
+    };
+    FirebaseFirestore.instance.collection('chat_rooms').doc(roomId).collection('messages').add(data);
+
+  }
 
 
   void messageRemoved() {
