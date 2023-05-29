@@ -259,6 +259,7 @@ class _AllAdsDetailPageState extends State<AllAdsDetailPage> {
                 'product_id': widget.postId,
                 'product_name': widget.name,
                 'images': widget.resim,
+                
                 'users': [widget.postUserId, uid],
               }).then((value) {
                 print('id skfksldf' + value.id);
