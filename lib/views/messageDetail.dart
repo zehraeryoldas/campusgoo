@@ -35,7 +35,6 @@ class MessageDetail extends StatefulWidget {
 
 class _MessageDetailState extends State<MessageDetail> {
   TextEditingController messageController = TextEditingController();
-  String currentUser = FirebaseAuth.instance.currentUser!.uid;
 
   void messageAdded(String text) {
     // Geçerli kullanıcının kimliğini alın
