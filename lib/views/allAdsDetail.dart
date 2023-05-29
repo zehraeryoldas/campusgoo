@@ -225,6 +225,7 @@ class _AllAdsDetailPageState extends State<AllAdsDetailPage> {
       child: ElevatedButton.icon(
         onPressed: () {
           print('here');
+          //burada öncelikle sohbet odası var ise eğer bir daha oluşturmayıp detay sayfasına geçiyor
           var uid = FirebaseAuth.instance.currentUser!.uid;
           FirebaseFirestore.instance
               .collection("chat_rooms")
@@ -243,27 +244,33 @@ class _AllAdsDetailPageState extends State<AllAdsDetailPage> {
                     //name: senderName.toString(),
                     resim: widget.resim,
                     product_name: widget.name,
-                    user: uid,
+                    user: widget.user,
                     roomId: value.docs[0].id,
                     postUserId: widget.postUserId,
                   ),
                 ),
               );
             } else {
+              //eğer sohbet odası yok ise de json formatında yeniden oluşturuyoruz.
               print('is new');
-              FirebaseFirestore.instance.collection('chat_rooms').add({
-                'lastMessage': '',
+               FirebaseFirestore.instance.collection('users')
+               .doc(uid)
+               .get()
+               .then((snapshot){
+               if(snapshot.exists){
+                String username = snapshot.data()!['name'];
+                FirebaseFirestore.instance.collection('chat_rooms').add({
+                  'lastMessage': '',
                 'timeStamp': DateTime.now(),
+                'senderName':username,
                 'senderId': uid,
                 'receiverId': widget.postUserId,
                 'product_id': widget.postId,
                 'product_name': widget.name,
                 'images': widget.resim,
-                
                 'users': [widget.postUserId, uid],
-              }).then((value) {
-                print('id skfksldf' + value.id);
-                Navigator.push(
+                }).then((value) {
+                   Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => MessageDetail(
@@ -272,33 +279,43 @@ class _AllAdsDetailPageState extends State<AllAdsDetailPage> {
                       //name: senderName.toString(),
                       resim: widget.resim,
                       product_name: widget.name,
-                      user: uid,
+                      user: username,
                       roomId: value.id,
                     ),
                   ),
                 );
-              });
+                });
+               }
+               });
+              // FirebaseFirestore.instance.collection('chat_rooms').add({
+              //   'lastMessage': '',
+              //   'timeStamp': DateTime.now(),
+                
+              //   'senderId': uid,
+              //   'receiverId': widget.postUserId,
+              //   'product_id': widget.postId,
+              //   'product_name': widget.name,
+              //   'images': widget.resim,
+              //   'users': [widget.postUserId, uid],
+              // }).then((value) {
+              //   print('id skfksldf' + value.id);
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (context) => MessageDetail(
+              //         userId: FirebaseAuth.instance.currentUser!.uid.toString(),
+              //         postId: widget.postId,
+              //         //name: senderName.toString(),
+              //         resim: widget.resim,
+              //         product_name: widget.name,
+              //         user: uid,
+              //         roomId: value.id,
+              //       ),
+              //     ),
+              //   );
+              // });
             }
           });
-
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: ((context) => urunDetayMesajlasma(
-          //               userId: FirebaseAuth.instance.currentUser!.uid.toString(),
-          //               conversationId: widget.postId.toString(),
-          //
-          //               postId: widget.postId.toString(),
-          //               postUserId: widget.postUserId.toString(),
-          //               name: widget.name.toString(),
-          //               price: widget.price!.toInt(),
-          //               resim: widget.resim.toString(),
-          //               konum: widget.konum.toString(),
-          //               durum: widget.durum.toString(),
-          //               user: widget.user.toString(),
-          //               aciklama: widget.aciklama.toString(),
-          //
-          //             ))));
         },
         icon: const Icon(Icons.message),
         label: const Text("Sohbet"),
