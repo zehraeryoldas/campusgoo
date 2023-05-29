@@ -16,7 +16,6 @@ class MessageDetail extends StatefulWidget {
       this.postUserId,
       this.user,
       this.resim,
-      // this.name,
       this.product_name,
       this.userId,
       required this.roomId});
@@ -24,7 +23,7 @@ class MessageDetail extends StatefulWidget {
   final String? postUserId;
   final String? user;
   final String? resim;
-  //final String? name;
+
   final String? product_name;
   final String? userId;
   final String roomId;
@@ -140,13 +139,6 @@ class _MessageDetailState extends State<MessageDetail> {
         .collection('messages')
         .orderBy('date', descending: false)
         .snapshots();
-    //final String userId = "pceXDyA3HagfmzQ8vyXw8vokOaz1";
-    // final Stream<QuerySnapshot> messageStream = FirebaseFirestore.instance
-    //     .collection('chats')
-    //     .where("users", isEqualTo: [currentUser, widget.user])
-    //     .where("product_id", isEqualTo: widget.postId)
-    //     .orderBy("timeStamp", descending: false)
-    //     .snapshots();
 
     return Scaffold(
       appBar: AppBar(
@@ -159,7 +151,6 @@ class _MessageDetailState extends State<MessageDetail> {
               Icons.arrow_back,
               color: Colors.black,
             )),
-    
         title: Row(
           children: [
             SizedBox(
