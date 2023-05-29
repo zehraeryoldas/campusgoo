@@ -108,25 +108,13 @@ class _ConversationState extends State<Conversation> {
                   final data = snapshot.data!.docs[index];
                   String receiverId = data['receiverId'].toString();
                   String senderId = data['senderId'].toString();
-                  //String senderName = data['senderName'].toString();
-                   String message = data['lastMessage'].toString();
+                  String senderName = data['senderName'].toString();
+                  String message = data['lastMessage'].toString();
                   String product_id = data['product_id'].toString();
                   String images = data['images'].toString();
                   String product_name = data['product_name'].toString();
 
                   var lastMessage = '';
-                  // FirebaseFirestore.instance
-                  //     .collection("chat_rooms")
-                  //     .doc(data.id)
-                  //     .collection('messages')
-                  //     .orderBy("date", descending: false)
-                  //     .limit(1)
-                  //     .get()
-                  //     .then((value) {
-                  //   setState(() {
-                  //     lastMessage = value.docs[0].get('message');
-                  //   });
-                  // });
 
                   return GestureDetector(
                     onTap: () {
@@ -140,7 +128,8 @@ class _ConversationState extends State<Conversation> {
                             //name: senderName.toString(),
                             resim: images.toString(),
                             product_name: product_name.toString(),
-                            user: senderId.toString(),
+                            // user: senderId.toString(),
+                            user: senderName.toString(),
                             roomId: data.id,
                             postUserId: receiverId.toString(),
                           ),
@@ -176,7 +165,7 @@ class _ConversationState extends State<Conversation> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 20),
                                 child: Text(
-                                  product_name,
+                                  senderName,
                                   style: const TextStyle(
                                     color: Colors.black87,
                                     fontSize: 15.0,
