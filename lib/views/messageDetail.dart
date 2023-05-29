@@ -37,12 +37,12 @@ class _MessageDetailState extends State<MessageDetail> {
   TextEditingController messageController = TextEditingController();
 
   void messageAdded(String text) {
-    // Geçerli kullanıcının kimliğini alın
-    final user = FirebaseAuth.instance.currentUser!.uid;
+    // Geçerli kullanıcının kimliğini aldım burda
+    final currentUser = FirebaseAuth.instance.currentUser!.uid;
 
     FirebaseFirestore.instance
         .collection('users')
-        .doc(user)
+        .doc(currentUser)
         .get()
         .then((snapshot) {
       if (snapshot.exists) {
@@ -55,7 +55,7 @@ class _MessageDetailState extends State<MessageDetail> {
             .collection('messages')
             .add({
           'date': DateTime.now(),
-          'from': user,
+          'from': currentUser,
           'to': widget.postUserId,
           'message': messageController.text,
         }).then((value) {
@@ -113,16 +113,6 @@ class _MessageDetailState extends State<MessageDetail> {
     if (payLoad != null) {
       print("Bildirim seçildi,$payLoad");
     }
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    //uygulama ilk açıldığında
-    //kurulum fonksiyonunu gerçekleştiriyoruz.
-    // Bununla işlerimizi halledebiliyoruz.
-    // androidKurulum();
   }
 
   Future<void> bildirimGoster(String message) async {
