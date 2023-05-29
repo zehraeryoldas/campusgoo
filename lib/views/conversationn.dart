@@ -54,22 +54,24 @@ class _ConversationState extends State<Conversation> {
             padding: const EdgeInsets.only(left: 10),
             child: Row(
               children: [
-                Text(
+                const Text(
                   "Sohbetler",
                   style: TextStyle(color: Colors.black, fontSize: 22),
                 ),
-                Spacer(),
+                const Spacer(),
                 Row(
                   children: [
-                    IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+                    IconButton(
+                        onPressed: () {}, icon: const Icon(Icons.search)),
                     PopupMenuButton(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18),
                       ),
                       elevation: 1,
-                      icon: Icon(Icons.more_vert),
+                      icon: const Icon(Icons.more_vert),
                       itemBuilder: (context) => [
                         const PopupMenuItem(
+                          value: 1,
                           child: Text(
                             "Sohbeti Sil",
                             style: TextStyle(
@@ -77,7 +79,6 @@ class _ConversationState extends State<Conversation> {
                               fontSize: 22,
                             ),
                           ),
-                          value: 1,
                         ),
                       ],
                       onSelected: (value) {
@@ -107,11 +108,25 @@ class _ConversationState extends State<Conversation> {
                   final data = snapshot.data!.docs[index];
                   String receiverId = data['receiverId'].toString();
                   String senderId = data['senderId'].toString();
-                  String senderName = data['senderName'].toString();
-                  String message = data['message'].toString();
+                  //String senderName = data['senderName'].toString();
+                   String message = data['lastMessage'].toString();
                   String product_id = data['product_id'].toString();
                   String images = data['images'].toString();
                   String product_name = data['product_name'].toString();
+
+                  var lastMessage = '';
+                  // FirebaseFirestore.instance
+                  //     .collection("chat_rooms")
+                  //     .doc(data.id)
+                  //     .collection('messages')
+                  //     .orderBy("date", descending: false)
+                  //     .limit(1)
+                  //     .get()
+                  //     .then((value) {
+                  //   setState(() {
+                  //     lastMessage = value.docs[0].get('message');
+                  //   });
+                  // });
 
                   return GestureDetector(
                     onTap: () {
@@ -122,11 +137,12 @@ class _ConversationState extends State<Conversation> {
                             userId: FirebaseAuth.instance.currentUser!.uid
                                 .toString(),
                             postId: product_id.toString(),
-                            name: senderName.toString(),
+                            //name: senderName.toString(),
                             resim: images.toString(),
                             product_name: product_name.toString(),
                             user: senderId.toString(),
                             roomId: data.id,
+                            postUserId: receiverId.toString(),
                           ),
                         ),
                       );
@@ -160,7 +176,7 @@ class _ConversationState extends State<Conversation> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 20),
                                 child: Text(
-                                  senderName,
+                                  product_name,
                                   style: const TextStyle(
                                     color: Colors.black87,
                                     fontSize: 15.0,
@@ -182,12 +198,12 @@ class _ConversationState extends State<Conversation> {
                               ),
                             ],
                           ),
-                          SizedBox(width: 30),
+                          const SizedBox(width: 30),
                           Column(
                             children: [
                               PopupMenuButton(
                                 itemBuilder: (context) => [
-                                  PopupMenuItem(
+                                  const PopupMenuItem(
                                     value: 1,
                                     child: Text("Sohbeti Sil"),
                                   ),
