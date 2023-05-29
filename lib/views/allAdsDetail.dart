@@ -1,7 +1,6 @@
 // ignore_for_file: unnecessary_string_interpolations
 import 'package:campusgoo/utility/color.dart';
 import 'package:campusgoo/views/messageDetail.dart';
-import 'package:campusgoo/views/urunDetayMesaj.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -233,6 +232,7 @@ class _AllAdsDetailPageState extends State<AllAdsDetailPage> {
               .where('users', arrayContains: uid)
               .get()
               .then((value) {
+            //value.docs ifadesi bu koleksiyondaki tüm belgeleri içeren bir liste döndürür
             if (value.docs.isNotEmpty) {
               print('is not new');
               Navigator.push(
@@ -241,7 +241,6 @@ class _AllAdsDetailPageState extends State<AllAdsDetailPage> {
                   builder: (context) => MessageDetail(
                     userId: FirebaseAuth.instance.currentUser!.uid.toString(),
                     postId: widget.postId,
-                    //name: senderName.toString(),
                     resim: widget.resim,
                     product_name: widget.name,
                     user: widget.user,
@@ -253,44 +252,46 @@ class _AllAdsDetailPageState extends State<AllAdsDetailPage> {
             } else {
               //eğer sohbet odası yok ise de json formatında yeniden oluşturuyoruz.
               print('is new');
-               FirebaseFirestore.instance.collection('users')
-               .doc(uid)
-               .get()
-               .then((snapshot){
-               if(snapshot.exists){
-                String username = snapshot.data()!['name'];
-                FirebaseFirestore.instance.collection('chat_rooms').add({
-                  'lastMessage': '',
-                'timeStamp': DateTime.now(),
-                'senderName':username,
-                'senderId': uid,
-                'receiverId': widget.postUserId,
-                'product_id': widget.postId,
-                'product_name': widget.name,
-                'images': widget.resim,
-                'users': [widget.postUserId, uid],
-                }).then((value) {
-                   Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MessageDetail(
-                      userId: FirebaseAuth.instance.currentUser!.uid.toString(),
-                      postId: widget.postId,
-                      //name: senderName.toString(),
-                      resim: widget.resim,
-                      product_name: widget.name,
-                      user: username,
-                      roomId: value.id,
-                    ),
-                  ),
-                );
-                });
-               }
-               });
+              FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(uid)
+                  .get()
+                  .then((snapshot) {
+                if (snapshot.exists) {
+                  String username = snapshot.data()!['name'];
+                  FirebaseFirestore.instance.collection('chat_rooms').add({
+                    'lastMessage': '',
+                    'timeStamp': DateTime.now(),
+                    'senderName': username,
+                    'senderId': uid,
+                    'receiverId': widget.postUserId,
+                    'product_id': widget.postId,
+                    'product_name': widget.name,
+                    'images': widget.resim,
+                    'users': [widget.postUserId, uid],
+                  }).then((value) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MessageDetail(
+                          userId:
+                              FirebaseAuth.instance.currentUser!.uid.toString(),
+                          postId: widget.postId,
+                          //name: senderName.toString(),
+                          resim: widget.resim,
+                          product_name: widget.name,
+                          user: username,
+                          roomId: value.id,
+                        ),
+                      ),
+                    );
+                  });
+                }
+              });
               // FirebaseFirestore.instance.collection('chat_rooms').add({
               //   'lastMessage': '',
               //   'timeStamp': DateTime.now(),
-                
+
               //   'senderId': uid,
               //   'receiverId': widget.postUserId,
               //   'product_id': widget.postId,

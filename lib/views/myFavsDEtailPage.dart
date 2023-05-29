@@ -1,6 +1,6 @@
 import 'package:campusgoo/utility/color.dart';
 import 'package:campusgoo/views/ads.dart';
-import 'package:campusgoo/views/urunDetayMesaj.dart';
+import 'package:campusgoo/utility/urunDetayMesaj.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -146,9 +146,14 @@ class _MyFavsDEtailPageState extends State<MyFavsDEtailPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: ((context) => urunDetayMesajlasma(
+                                builder: ((context) => 
+                                
+                                
+                                urunDetayMesajlasma(
                                       postUserId: widget.id, price: widget.price, name: widget.name, resim: widget.resim,
-                                    ))));
+                                    )
+                                    
+                                    )));
                       },
                       icon: Icon(Icons.message),
                       label: Text("Sohbet"),
