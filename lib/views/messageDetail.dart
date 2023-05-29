@@ -159,10 +159,7 @@ class _MessageDetailState extends State<MessageDetail> {
               Icons.arrow_back,
               color: Colors.black,
             )),
-        // title: Text(
-        //   widget.product_name.toString(),
-        //   style: const TextStyle(color: Colors.black, fontSize: 15),
-        // ),
+    
         title: Row(
           children: [
             SizedBox(
@@ -171,16 +168,16 @@ class _MessageDetailState extends State<MessageDetail> {
                 child: Image.network(widget.resim.toString())),
             Expanded(
                 child: ListTile(
-              // title: Text(
-              //   widget.name.toString(),
-              //   style: const TextStyle(
-              //       color: Colors.black,
-              //       fontSize: 12,
-              //       fontWeight: FontWeight.bold),
-              // ),
+              title: Text(
+                widget.user.toString(),
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold),
+              ),
               subtitle: Text(
                 widget.product_name.toString(),
-                style: const TextStyle(color: Colors.black, fontSize: 15),
+                style: const TextStyle(color: Colors.black, fontSize: 16),
               ),
             ))
           ],
