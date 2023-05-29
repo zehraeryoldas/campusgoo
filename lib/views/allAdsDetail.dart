@@ -252,11 +252,6 @@ class _AllAdsDetailPageState extends State<AllAdsDetailPage> {
             } else {
               print('is new');
               FirebaseFirestore.instance.collection('chat_rooms').add({
-                // 'timeStamp': DateTime.now(),
-                // 'product_id': widget.postId,
-                // 'product_name': widget.name,
-                // 'images': widget.resim,
-                // 'users': [widget.postUserId, uid],
                 'lastMessage': '',
                 'timeStamp': DateTime.now(),
                 'senderId': uid,
