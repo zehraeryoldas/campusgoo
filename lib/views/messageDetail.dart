@@ -99,33 +99,36 @@ class _MessageDetailState extends State<MessageDetail> {
     });
   }
 
-    Future<void> sendTextMessage(String roomId, String message) async {
-    var data = <String,dynamic>{
-      'from' : FirebaseAuth.instance.currentUser!.uid,
-      'to' : widget.postUserId,
-      'message' : message,
-      'message_type' : '0',
-      'isSeenFrom' : true,
-      'isSeenTo' : false,
-      'date' : DateTime.now(),
+  Future<void> sendTextMessage(String roomId, String message) async {
+    var data = <String, dynamic>{
+      'from': FirebaseAuth.instance.currentUser!.uid,
+      'to': widget.postUserId,
+      'message': message,
+      'message_type': '0',
+      'isSeenFrom': true,
+      'isSeenTo': false,
+      'date': DateTime.now(),
     };
-    FirebaseFirestore.instance.collection('chat_rooms').doc(widget.roomId).collection('messages').add(data);
-
+    FirebaseFirestore.instance
+        .collection('chat_rooms')
+        .doc(widget.roomId)
+        .collection('messages')
+        .add(data);
   }
 
-  
-  late String room_id;
-  final Stream<QuerySnapshot> chatStream = FirebaseFirestore.instance.collection('chat_rooms').doc(room_id).collection('messages').orderBy('date', descending: true).snapshots();
- @override
+  //String roomId = widget.roomId;
+  //final Stream<QuerySnapshot> chatStream = FirebaseFirestore.instance.collection('chat_rooms').doc(this.roomId).collection('messages').orderBy('date', descending: true).snapshots();
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    room_id= widget.roomId;
+    //room_id= widget.roomId;
     //uygulama ilk açıldığında
     //kurulum fonksiyonunu gerçekleştiriyoruz.
     // Bununla işlerimizi halledebiliyoruz.
     // androidKurulum();
   }
+
   void messageRemoved() {
     FirebaseFirestore.instance
         .collection("chats")
@@ -162,8 +165,6 @@ class _MessageDetailState extends State<MessageDetail> {
     }
   }
 
- 
-
   Future<void> bildirimGoster(String message) async {
     var androidBildirimDetay = const AndroidNotificationDetails(
         "kanal id", "kanal başlık",
@@ -184,13 +185,25 @@ class _MessageDetailState extends State<MessageDetail> {
   @override
   Widget build(BuildContext context) {
     //final String userId = "pceXDyA3HagfmzQ8vyXw8vokOaz1";
-    final Stream<QuerySnapshot> messageStream = FirebaseFirestore.instance
-        .collection('chats')
-        .where("users", isEqualTo: [currentUser, widget.user])
-        .where("product_id", isEqualTo: widget.postId)
-        .orderBy("timeStamp", descending: false)
-        .snapshots();
+    // final Stream<QuerySnapshot> messageStream = FirebaseFirestore.instance
+    //     .collection('chats')
+    //     .where("users", isEqualTo: [currentUser, widget.user])
+    //     .where("product_id", isEqualTo: widget.postId)
+    //     .orderBy("timeStamp", descending: false)
+    //     .snapshots();
 
+    // final Stream<QuerySnapshot> messageStream = FirebaseFirestore.instance
+    //     .collection('chat_rooms')
+    //     .doc(widget.roomId)
+    //     .collection('messages')
+    //     .snapshots();
+    //     print("hellüü");
+    //     print(widget.roomId);
+    //     print("helllü");
+
+    final Stream<QuerySnapshot> messageStream=FirebaseFirestore.instance
+    .collection('chat_rooms').doc(widget.roomId).collection('messages').orderBy("date",descending: false).snapshots();
+    
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -355,4 +368,3 @@ class _MessageDetailState extends State<MessageDetail> {
     );
   }
 }
-

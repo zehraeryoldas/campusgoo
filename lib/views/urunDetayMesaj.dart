@@ -86,7 +86,7 @@ class _urunDetayMesajlasmaState extends State<urunDetayMesajlasma> {
         'images': widget.resim,
         'users': [widget.postUserId, user],
       }).then((value) {
-        sendTextMessage(value.id,messageController.text,);
+        sendTextMessage(value.id,messageController.text);
         messageController.text = '';
         bildirimGoster(text);
       }).catchError((error) {

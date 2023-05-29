@@ -25,15 +25,18 @@ class _ConversationState extends State<Conversation> {
     .where("senderId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
     .snapshots();*/
 
-  final Stream<QuerySnapshot> stream = FirebaseFirestore.instance.collection('chat_rooms').where('users',arrayContains: FirebaseAuth.instance.currentUser!.uid).snapshots();
+  final Stream<QuerySnapshot> stream = FirebaseFirestore.instance
+      .collection('chat_rooms')
+      .where('users', arrayContains: FirebaseAuth.instance.currentUser!.uid)
+      .snapshots();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children:[
-       const   Padding(
-            padding:  EdgeInsets.only(right: 280, top: 40),
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(right: 280, top: 40),
             child: Text(
               "CampusGo",
               style: TextStyle(
@@ -98,228 +101,229 @@ class _ConversationState extends State<Conversation> {
                 return const Text('No messages');
               }
               return Expanded(
-                child: ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        final data = snapshot.data!.docs[index];
-                        String receiverId = data['receiverId'].toString();
-                        String senderId = data['senderId'].toString();
-                        String senderName = data['senderName'].toString();
-                        String message = data['message'].toString();
-                        String product_id = data['product_id'].toString();
-                        String images = data['images'].toString();
-                        String product_name = data['product_name'].toString();
+                  child: ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  final data = snapshot.data!.docs[index];
+                  String receiverId = data['receiverId'].toString();
+                  String senderId = data['senderId'].toString();
+                  String senderName = data['senderName'].toString();
+                  String message = data['message'].toString();
+                  String product_id = data['product_id'].toString();
+                  String images = data['images'].toString();
+                  String product_name = data['product_name'].toString();
 
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MessageDetail(
-                                  userId: FirebaseAuth.instance.currentUser!.uid.toString(),
-                                  postId: product_id.toString(),
-                                  name: senderName.toString(),
-                                  resim: images.toString(),
-                                  product_name: product_name.toString(),
-                                  user: senderId.toString(),
-                                  roomId: data.id,
-                                ),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            height: 100,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(18),
-                              border: Border.all(color: Colors.grey.shade300),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: SizedBox(
-                                    width: 80,
-                                    height: 80,
-                                    child: images.toString() == ""
-                                      ? const CircleAvatar(
-                                          child: Text("No img"),
-                                        )
-                                      : CircleAvatar(
-                                          backgroundColor: Colors.transparent,
-                                          child: Image.network(images),
-                                        ),
-                                  ),
-                                ),
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 20),
-                                      child: Text(
-                                        senderName,
-                                        style: const TextStyle(
-                                          color: Colors.black87,
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: "RobotoCondensed",
-                                        ),
-                                      ),
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MessageDetail(
+                            userId: FirebaseAuth.instance.currentUser!.uid
+                                .toString(),
+                            postId: product_id.toString(),
+                            name: senderName.toString(),
+                            resim: images.toString(),
+                            product_name: product_name.toString(),
+                            user: senderId.toString(),
+                            roomId: data.id,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(color: Colors.grey.shade300),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              width: 80,
+                              height: 80,
+                              child: images.toString() == ""
+                                  ? const CircleAvatar(
+                                      child: Text("No img"),
+                                    )
+                                  : CircleAvatar(
+                                      backgroundColor: Colors.transparent,
+                                      child: Image.network(images),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        message,
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 15.0,
-                                          fontFamily: "RobotoCondensed",
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(width: 30),
-                                Column(
-                                  children: [
-                                    PopupMenuButton(
-                                      itemBuilder: (context) => [
-                                        PopupMenuItem(
-                                          value: 1,
-                                          child: Text("Sohbeti Sil"),
-                                        ),
-                                      ],
-                                      onSelected: (value) {
-                                        if (value == 1) {
-                                          print("deleted");
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ],
                             ),
                           ),
-                        );
-                      },
-                    )
-                // child: StreamBuilder<QuerySnapshot>(
-                //   stream: senderStream,
-                //   builder: (context, senderSnapshot) {
-                //     if (senderSnapshot.connectionState == ConnectionState.waiting) {
-                //       return const Text('Loading...');
-                //     }
-                //     if (!senderSnapshot.hasData || senderSnapshot.data!.docs.isEmpty) {
-                //       return const Text('No messages');
-                //     }
+                          Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 20),
+                                child: Text(
+                                  senderName,
+                                  style: const TextStyle(
+                                    color: Colors.black87,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "RobotoCondensed",
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  message,
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 15.0,
+                                    fontFamily: "RobotoCondensed",
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 30),
+                          Column(
+                            children: [
+                              PopupMenuButton(
+                                itemBuilder: (context) => [
+                                  PopupMenuItem(
+                                    value: 1,
+                                    child: Text("Sohbeti Sil"),
+                                  ),
+                                ],
+                                onSelected: (value) {
+                                  if (value == 1) {
+                                    print("deleted");
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              )
+                  // child: StreamBuilder<QuerySnapshot>(
+                  //   stream: senderStream,
+                  //   builder: (context, senderSnapshot) {
+                  //     if (senderSnapshot.connectionState == ConnectionState.waiting) {
+                  //       return const Text('Loading...');
+                  //     }
+                  //     if (!senderSnapshot.hasData || senderSnapshot.data!.docs.isEmpty) {
+                  //       return const Text('No messages');
+                  //     }
 
-                //     final allDocs = snapshot.data!.docs + senderSnapshot.data!.docs;
+                  //     final allDocs = snapshot.data!.docs + senderSnapshot.data!.docs;
 
-                //     return ListView.builder(
-                //       itemCount: allDocs.length,
-                //       itemBuilder: (context, index) {
-                //         final data = allDocs[index];
-                //         String receiverId = data['receiverId'].toString();
-                //         String senderId = data['senderId'].toString();
-                //         String senderName = data['senderName'].toString();
-                //         String message = data['message'].toString();
-                //         String product_id = data['product_id'].toString();
-                //         String images = data['images'].toString();
-                //         String product_name = data['product_name'].toString();
+                  //     return ListView.builder(
+                  //       itemCount: allDocs.length,
+                  //       itemBuilder: (context, index) {
+                  //         final data = allDocs[index];
+                  //         String receiverId = data['receiverId'].toString();
+                  //         String senderId = data['senderId'].toString();
+                  //         String senderName = data['senderName'].toString();
+                  //         String message = data['message'].toString();
+                  //         String product_id = data['product_id'].toString();
+                  //         String images = data['images'].toString();
+                  //         String product_name = data['product_name'].toString();
 
-                //         return GestureDetector(
-                //           onTap: () {
-                //             Navigator.push(
-                //               context,
-                //               MaterialPageRoute(
-                //                 builder: (context) => MessageDetail(
-                //                   userId: FirebaseAuth.instance.currentUser!.uid.toString(),
-                //                   postId: product_id.toString(),
-                //                   name: senderName.toString(),
-                //                   resim: images.toString(),
-                //                   product_name: product_name.toString(),
-                //                   user: senderId.toString(),
-                //                 ),
-                //               ),
-                //             );
-                //           },
-                //           child: Container(
-                //             height: 100,
-                //             decoration: BoxDecoration(
-                //               borderRadius: BorderRadius.circular(18),
-                //               border: Border.all(color: Colors.grey.shade300),
-                //             ),
-                //             child: Row(
-                //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //               children: [
-                //                 Padding(
-                //                   padding: const EdgeInsets.all(8.0),
-                //                   child: SizedBox(
-                //                     width: 80,
-                //                     height: 80,
-                //                     child: images.toString() == ""
-                //                       ? const CircleAvatar(
-                //                           child: Text("No img"),
-                //                         )
-                //                       : CircleAvatar(
-                //                           backgroundColor: Colors.transparent,
-                //                           child: Image.network(images),
-                //                         ),
-                //                   ),
-                //                 ),
-                //                 Column(
-                //                   children: [
-                //                     Padding(
-                //                       padding: const EdgeInsets.only(top: 20),
-                //                       child: Text(
-                //                         senderName,
-                //                         style: const TextStyle(
-                //                           color: Colors.black87,
-                //                           fontSize: 15.0,
-                //                           fontWeight: FontWeight.bold,
-                //                           fontFamily: "RobotoCondensed",
-                //                         ),
-                //                       ),
-                //                     ),
-                //                     Padding(
-                //                       padding: const EdgeInsets.all(8.0),
-                //                       child: Text(
-                //                         message,
-                //                         style: const TextStyle(
-                //                           color: Colors.grey,
-                //                           fontSize: 15.0,
-                //                           fontFamily: "RobotoCondensed",
-                //                         ),
-                //                       ),
-                //                     ),
-                //                   ],
-                //                 ),
-                //                 SizedBox(width: 30),
-                //                 Column(
-                //                   children: [
-                //                     PopupMenuButton(
-                //                       itemBuilder: (context) => [
-                //                         PopupMenuItem(
-                //                           value: 1,
-                //                           child: Text("Sohbeti Sil"),
-                //                         ),
-                //                       ],
-                //                       onSelected: (value) {
-                //                         if (value == 1) {
-                //                           print("deleted");
-                //                         }
-                //                       },
-                //                     ),
-                //                   ],
-                //                 ),
-                //               ],
-                //             ),
-                //           ),
-                //         );
-                //       },
-                //     );
-                //   },
-                // ),
-              );
+                  //         return GestureDetector(
+                  //           onTap: () {
+                  //             Navigator.push(
+                  //               context,
+                  //               MaterialPageRoute(
+                  //                 builder: (context) => MessageDetail(
+                  //                   userId: FirebaseAuth.instance.currentUser!.uid.toString(),
+                  //                   postId: product_id.toString(),
+                  //                   name: senderName.toString(),
+                  //                   resim: images.toString(),
+                  //                   product_name: product_name.toString(),
+                  //                   user: senderId.toString(),
+                  //                 ),
+                  //               ),
+                  //             );
+                  //           },
+                  //           child: Container(
+                  //             height: 100,
+                  //             decoration: BoxDecoration(
+                  //               borderRadius: BorderRadius.circular(18),
+                  //               border: Border.all(color: Colors.grey.shade300),
+                  //             ),
+                  //             child: Row(
+                  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //               children: [
+                  //                 Padding(
+                  //                   padding: const EdgeInsets.all(8.0),
+                  //                   child: SizedBox(
+                  //                     width: 80,
+                  //                     height: 80,
+                  //                     child: images.toString() == ""
+                  //                       ? const CircleAvatar(
+                  //                           child: Text("No img"),
+                  //                         )
+                  //                       : CircleAvatar(
+                  //                           backgroundColor: Colors.transparent,
+                  //                           child: Image.network(images),
+                  //                         ),
+                  //                   ),
+                  //                 ),
+                  //                 Column(
+                  //                   children: [
+                  //                     Padding(
+                  //                       padding: const EdgeInsets.only(top: 20),
+                  //                       child: Text(
+                  //                         senderName,
+                  //                         style: const TextStyle(
+                  //                           color: Colors.black87,
+                  //                           fontSize: 15.0,
+                  //                           fontWeight: FontWeight.bold,
+                  //                           fontFamily: "RobotoCondensed",
+                  //                         ),
+                  //                       ),
+                  //                     ),
+                  //                     Padding(
+                  //                       padding: const EdgeInsets.all(8.0),
+                  //                       child: Text(
+                  //                         message,
+                  //                         style: const TextStyle(
+                  //                           color: Colors.grey,
+                  //                           fontSize: 15.0,
+                  //                           fontFamily: "RobotoCondensed",
+                  //                         ),
+                  //                       ),
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //                 SizedBox(width: 30),
+                  //                 Column(
+                  //                   children: [
+                  //                     PopupMenuButton(
+                  //                       itemBuilder: (context) => [
+                  //                         PopupMenuItem(
+                  //                           value: 1,
+                  //                           child: Text("Sohbeti Sil"),
+                  //                         ),
+                  //                       ],
+                  //                       onSelected: (value) {
+                  //                         if (value == 1) {
+                  //                           print("deleted");
+                  //                         }
+                  //                       },
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //           ),
+                  //         );
+                  //       },
+                  //     );
+                  //   },
+                  // ),
+                  );
             },
           ),
         ],
