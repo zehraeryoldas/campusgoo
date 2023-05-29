@@ -37,28 +37,6 @@ class _MessageDetailState extends State<MessageDetail> {
   TextEditingController messageController = TextEditingController();
   String currentUser = FirebaseAuth.instance.currentUser!.uid;
 
-  // void messageAdded(String text) {
-  //   //final user = FirebaseAuth.instance.currentUser!.uid;
-  //   if (currentUser != null) {
-  //     FirebaseFirestore.instance.collection("chats").add({
-  //       'message': text,
-  //       'timeStamp': DateTime.now(),
-  //       'senderId': currentUser,
-  //       'receiverId': widget.user,
-  //       'product_id': widget.postId,
-  //       'user_name': FirebaseAuth.instance.currentUser!.uid,
-  //       'images': widget.resim,
-  //       'users': [currentUser, widget.user],
-  //       'product_name': widget.name,
-  //     }).then((value) {
-  //       messageController.text = '';
-  //       bildirimGoster(text);
-  //     }).catchError((error) {
-  //       print("Error adding message: $error");
-  //     });
-  //   }
-  // }
-
   void messageAdded(String text) {
     // Geçerli kullanıcının kimliğini alın
     final user = FirebaseAuth.instance.currentUser!.uid;
