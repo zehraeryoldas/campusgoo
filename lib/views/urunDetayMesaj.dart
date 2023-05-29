@@ -66,57 +66,58 @@ class _urunDetayMesajlasmaState extends State<urunDetayMesajlasma> {
   // }
 
   void messageAdded(String text) {
-  final user = FirebaseAuth.instance.currentUser!.uid;
-  
-  FirebaseFirestore.instance
-      .collection('users')
-      .doc(user)
-      .get()
-      .then((snapshot) {
-    if (snapshot.exists) {
-      String username = snapshot.data()!['name'];
-      FirebaseFirestore.instance.collection('chat_rooms').add({
-        'message': text,
-        'timeStamp': DateTime.now(),
-        'senderId': user,
-        'senderName': username,
-        'receiverId': widget.postUserId,
-        'product_id': widget.postId,
-        'product_name': widget.name,
-        'images': widget.resim,
-        'users': [widget.postUserId, user],
-      }).then((value) {
-        sendTextMessage(value.id,messageController.text);
-        messageController.text = '';
-        bildirimGoster(text);
-      }).catchError((error) {
-        print('Mesaj ekleme hatası: $error');
-      });
-    } else {
-      print('Kullanıcı adı bulunamadı');
-    }
-  }).catchError((error) {
-    print('Kullanıcı adını alma hatası: $error');
-  });
-}
-  Future<void> sendTextMessage(String roomId, String message) async {
-    var data = <String,dynamic>{
-      'from' : FirebaseAuth.instance.currentUser!.uid,
-      'to' : widget.postUserId,
-      'message' : message,
-      'message_type' : '0',
-      'isSeenFrom' : true,
-      'isSeenTo' : false,
-      'date' : DateTime.now(),
-    };
-    FirebaseFirestore.instance.collection('chat_rooms').doc(roomId).collection('messages').add(data);
+    final user = FirebaseAuth.instance.currentUser!.uid;
 
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user)
+        .get()
+        .then((snapshot) {
+      if (snapshot.exists) {
+        String username = snapshot.data()!['name'];
+        FirebaseFirestore.instance.collection('chats').add({
+          'message': text,
+          'timeStamp': DateTime.now(),
+          'senderId': user,
+          'senderName': username,
+          'receiverId': widget.postUserId,
+          'product_id': widget.postId,
+          'product_name': widget.name,
+          'images': widget.resim,
+          'users': [widget.postUserId, user],
+        }).then((value) {
+          //sendTextMessage(value.id,messageController.text);
+          messageController.text = '';
+          bildirimGoster(text);
+        }).catchError((error) {
+          print('Mesaj ekleme hatası: $error');
+        });
+      } else {
+        print('Kullanıcı adı bulunamadı');
+      }
+    }).catchError((error) {
+      print('Kullanıcı adını alma hatası: $error');
+    });
   }
+  // Future<void> sendTextMessage(String roomId, String message) async {
+  //   var data = <String,dynamic>{
+  //     'from' : FirebaseAuth.instance.currentUser!.uid,
+  //     'to' : widget.postUserId,
+  //     'message' : message,
+  //     'message_type' : '0',
+  //     'isSeenFrom' : true,
+  //     'isSeenTo' : false,
+  //     'date' : DateTime.now(),
+  //   };
+  //   FirebaseFirestore.instance.collection('chat_rooms').doc(roomId).collection('messages').add(data);
 
+  // }
 
   void messageRemoved() {
     FirebaseFirestore.instance
         .collection("chats")
+        .where('product_id',isEqualTo: widget.postId)
+        .where('senderId',isEqualTo:  FirebaseAuth.instance.currentUser!.uid)
         // .doc(widget.postId)
         // .collection("chats")
         .get()
@@ -150,16 +151,6 @@ class _urunDetayMesajlasmaState extends State<urunDetayMesajlasma> {
     if (payLoad != null) {
       print("Bildirim seçildi,$payLoad");
     }
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    //uygulama ilk açıldığında
-    //kurulum fonksiyonunu gerçekleştiriyoruz.
-    // Bununla işlerimizi halledebiliyoruz.
-    // androidKurulum();
   }
 
   Future<void> bildirimGoster(String message) async {
@@ -313,8 +304,9 @@ class _urunDetayMesajlasmaState extends State<urunDetayMesajlasma> {
   Expanded _messageSenderButton() {
     void submitMessage(String text) {
       String message = messageController.text;
-      messageAdded(message,
-          ); // Kullanıcı adını burada belirtin veya dinamik olarak ayarlayın
+      messageAdded(
+        message,
+      ); // Kullanıcı adını burada belirtin veya dinamik olarak ayarlayın
       bildirimGoster(message);
     }
 
@@ -363,4 +355,3 @@ class _urunDetayMesajlasmaState extends State<urunDetayMesajlasma> {
     );
   }
 }
-
