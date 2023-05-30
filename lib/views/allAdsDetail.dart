@@ -264,6 +264,7 @@ class _AllAdsDetailPageState extends State<AllAdsDetailPage> {
                     'timeStamp': DateTime.now(),
                     'senderName': username,
                     'senderId': uid,
+                    'status':1,
                     'receiverId': widget.postUserId,
                     'product_id': widget.postId,
                     'product_name': widget.name,
@@ -288,33 +289,6 @@ class _AllAdsDetailPageState extends State<AllAdsDetailPage> {
                   });
                 }
               });
-              // FirebaseFirestore.instance.collection('chat_rooms').add({
-              //   'lastMessage': '',
-              //   'timeStamp': DateTime.now(),
-
-              //   'senderId': uid,
-              //   'receiverId': widget.postUserId,
-              //   'product_id': widget.postId,
-              //   'product_name': widget.name,
-              //   'images': widget.resim,
-              //   'users': [widget.postUserId, uid],
-              // }).then((value) {
-              //   print('id skfksldf' + value.id);
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => MessageDetail(
-              //         userId: FirebaseAuth.instance.currentUser!.uid.toString(),
-              //         postId: widget.postId,
-              //         //name: senderName.toString(),
-              //         resim: widget.resim,
-              //         product_name: widget.name,
-              //         user: uid,
-              //         roomId: value.id,
-              //       ),
-              //     ),
-              //   );
-              // });
             }
           });
         },
