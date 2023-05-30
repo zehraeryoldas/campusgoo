@@ -54,6 +54,7 @@ class _MessageDetailState extends State<MessageDetail> {
             .collection('messages')
             .add({
           'date': DateTime.now(),
+          'status':1,
           'from': currentUser,
           'to': widget.postUserId,
           'message': messageController.text,
@@ -80,11 +81,15 @@ class _MessageDetailState extends State<MessageDetail> {
 
   void messageRemoved() {
     FirebaseFirestore.instance
-        .collection("chats")
+        .collection("chat_rooms")
+        .doc(widget.roomId)
+        .collection("messages")
+        .where("from", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((QueryDocumentSnapshot document) {
-        document.reference.delete();
+        document.reference.update({'status':0});
       });
     }).catchError((error) {
       print("Error removing messages: $error");
@@ -137,6 +142,7 @@ class _MessageDetailState extends State<MessageDetail> {
         .collection('chat_rooms')
         .doc(widget.roomId)
         .collection('messages')
+        .where("status",isEqualTo: 1)
         .orderBy('date', descending: false)
         .snapshots();
 
