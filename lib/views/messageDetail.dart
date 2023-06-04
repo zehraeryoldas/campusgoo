@@ -54,7 +54,7 @@ class _MessageDetailState extends State<MessageDetail> {
             .collection('messages')
             .add({
           'date': DateTime.now(),
-          'status':1,
+          'status': 1,
           'from': currentUser,
           'to': widget.postUserId,
           'message': messageController.text,
@@ -62,8 +62,9 @@ class _MessageDetailState extends State<MessageDetail> {
           FirebaseFirestore.instance
               .collection("chat_rooms")
               .doc(widget.roomId)
-              .update({'lastMessage': messageController.text});
+              .update({'lastMessage': messageController.text, 'status': 1});
           //mesaj firebase başarıyla kaydedildiğinde bu satır çalışır
+
           messageController.text = '';
           bildirimGoster(text);
         }).catchError((error) {
@@ -85,11 +86,10 @@ class _MessageDetailState extends State<MessageDetail> {
         .doc(widget.roomId)
         .collection("messages")
         .where("from", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((QueryDocumentSnapshot document) {
-        document.reference.update({'status':0});
+        document.reference.update({'status': 0});
       });
     }).catchError((error) {
       print("Error removing messages: $error");
@@ -142,7 +142,7 @@ class _MessageDetailState extends State<MessageDetail> {
         .collection('chat_rooms')
         .doc(widget.roomId)
         .collection('messages')
-        .where("status",isEqualTo: 1)
+        .where("status", isEqualTo: 1)
         .orderBy('date', descending: false)
         .snapshots();
 
