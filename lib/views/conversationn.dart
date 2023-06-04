@@ -15,21 +15,22 @@ class Conversation extends StatefulWidget {
 class _ConversationState extends State<Conversation> {
   String user = FirebaseAuth.instance.currentUser!.uid;
 
-  /*final Stream<QuerySnapshot> stream = FirebaseFirestore.instance
-    .collection('chats')
-    .where("receiverId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-    .snapshots();
-
-  final Stream<QuerySnapshot> senderStream = FirebaseFirestore.instance
-    .collection('chats')
-    .where("senderId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-    .snapshots();*/
-
   final Stream<QuerySnapshot> stream = FirebaseFirestore.instance
       .collection('chat_rooms')
       .where('users', arrayContains: FirebaseAuth.instance.currentUser!.uid)
-      .where("status",isEqualTo: 1)
+      .where("status", isEqualTo: 1)
       .snapshots();
+
+  void deleteChatRoom(String roomId) {
+    FirebaseFirestore.instance
+        .collection('chat_rooms')
+        .doc(roomId)
+        .update({'status': 0}).then((value) {
+      print('Sohbet silindi!');
+    }).catchError((error) {
+      print('Sohbet silinirken hata oluştu: $error');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -200,19 +201,46 @@ class _ConversationState extends State<Conversation> {
                                 ],
                                 onSelected: (value) {
                                   if (value == 1) {
-                                    print("deleted");
-                                    FirebaseFirestore.instance
-                                        .collection("chat_rooms")
-                                       .where("users",arrayContains: user)
-                                        .get()
-                                        .then((QuerySnapshot querySnapshot) {
-                                      querySnapshot.docs.forEach(
-                                          (QueryDocumentSnapshot document) {
-                                        document.reference.update({"status":0});
-                                      });
-                                    }).catchError((error) {
-                                      print("Error removing messages: $error");
-                                    });
+                                    // print("deleted");
+                                    // FirebaseFirestore.instance
+                                    //     .collection("chat_rooms")
+                                    //     .where("users", arrayContains: user)
+                                    //     .get()
+                                    //     .then((QuerySnapshot querySnapshot) {
+                                    //   querySnapshot.docs.forEach(
+                                    //       (QueryDocumentSnapshot document) {
+                                    //     document.reference
+                                    //         .update({"status": 0});
+                                    //   });
+                                    // }).catchError((error) {
+                                    //   print("Error removing messages: $error");
+                                    // });
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text('Sohbeti Sil'),
+                                          content: const Text(
+                                              'Bu sohbeti silmek istediğinize emin misiniz?'),
+                                          actions: [
+                                            TextButton(
+                                              child: const Text('Vazgeç'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                            TextButton(
+                                              child: const Text('Sil'),
+                                              onPressed: () {
+                                                // Sohbeti silme işlemi
+                                                deleteChatRoom(data.id);
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
                                   }
                                 },
                               ),
