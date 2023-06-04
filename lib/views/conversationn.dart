@@ -201,20 +201,6 @@ class _ConversationState extends State<Conversation> {
                                 ],
                                 onSelected: (value) {
                                   if (value == 1) {
-                                    // print("deleted");
-                                    // FirebaseFirestore.instance
-                                    //     .collection("chat_rooms")
-                                    //     .where("users", arrayContains: user)
-                                    //     .get()
-                                    //     .then((QuerySnapshot querySnapshot) {
-                                    //   querySnapshot.docs.forEach(
-                                    //       (QueryDocumentSnapshot document) {
-                                    //     document.reference
-                                    //         .update({"status": 0});
-                                    //   });
-                                    // }).catchError((error) {
-                                    //   print("Error removing messages: $error");
-                                    // });
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -232,7 +218,7 @@ class _ConversationState extends State<Conversation> {
                                             TextButton(
                                               child: const Text('Sil'),
                                               onPressed: () {
-                                                // Sohbeti silme işlemi
+                                                // Sohbeti silme işlemi burada odanın id'si alınarak mesaj silme işlemi tamamlandı
                                                 deleteChatRoom(data.id);
                                                 Navigator.of(context).pop();
                                               },
