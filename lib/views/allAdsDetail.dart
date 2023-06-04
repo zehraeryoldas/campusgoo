@@ -249,7 +249,8 @@ class _AllAdsDetailPageState extends State<AllAdsDetailPage> {
                   ),
                 ),
               );
-            } else {
+            } 
+            else {
               //eğer sohbet odası yok ise de json formatında yeniden oluşturuyoruz.
               print('is new');
               FirebaseFirestore.instance
@@ -264,7 +265,7 @@ class _AllAdsDetailPageState extends State<AllAdsDetailPage> {
                     'timeStamp': DateTime.now(),
                     'senderName': username,
                     'senderId': uid,
-                    'status':1,
+                    'status':0,
                     'receiverId': widget.postUserId,
                     'product_id': widget.postId,
                     'product_name': widget.name,
