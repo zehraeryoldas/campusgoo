@@ -108,6 +108,34 @@ class _profilePageState extends State<profilePagee> {
       .where('userStatus', isEqualTo: 1)
       .snapshots();
 
+  void accountDelete() {
+    FirebaseFirestore.instance
+        .collection("productss")
+        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((snapshot) {
+      snapshot.docs.forEach((document) {
+        document.reference.update({'user.userStatus': 0, 'productStatus': 0});
+      });
+    });
+
+    FirebaseFirestore.instance
+        .collection("users")
+        .where('id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((snapshot) {
+      snapshot.docs.forEach((document) {
+        document.reference.update({'userStatus': 0});
+      });
+
+      //deleteUser();
+      Navigator.push(
+          context, MaterialPageRoute(builder: ((context) => UserLogin())));
+    });
+
+    // Navigator.of(context).pop();
+  }
+
   TextEditingController imagesController = TextEditingController();
 
   @override
@@ -281,38 +309,28 @@ class _profilePageState extends State<profilePagee> {
                                   ]),
                               onSelected: (value) {
                                 if (value == 1) {
-                                  FirebaseFirestore.instance
-                                      .collection("productss")
-                                      .where('userId',
-                                          isEqualTo: FirebaseAuth
-                                              .instance.currentUser!.uid)
-                                      .get()
-                                      .then((snapshot) {
-                                    snapshot.docs.forEach((document) {
-                                      document.reference.update({
-                                        'user.userStatus': 0,
-                                        'productStatus': 0
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text("Hesabı sil"),
+                                          content: Text(
+                                              "Hesabı silmek istediğinize emin misiniz?"),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text("Vazgeç")),
+                                            TextButton(
+                                              onPressed: () {
+                                                accountDelete();
+                                              },
+                                              child: Text('Sil'),
+                                            )
+                                          ],
+                                        );
                                       });
-                                    });
-                                  });
-                                  setState(() {
-                                    FirebaseFirestore.instance
-                                        .collection("users")
-                                        .where('name', isEqualTo: data['name'])
-                                        .get()
-                                        .then((snapshot) {
-                                      snapshot.docs.forEach((document) {
-                                        document.reference
-                                            .update({'userStatus': 0});
-                                      });
-                                    });
-                                    //deleteUser();
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: ((context) =>
-                                                UserLogin())));
-                                  });
                                 }
                               },
                             ))),

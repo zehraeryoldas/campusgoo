@@ -1,4 +1,3 @@
-
 import 'package:campusgoo/views/myAdsDetail.dart';
 import 'package:campusgoo/views/myAdsUpdate.dart';
 import 'package:campusgoo/views/productAdd.dart';
@@ -109,7 +108,29 @@ class _ilanlarimState extends State<ilanlarim> {
                               onSelected: (menuItemValue) {
                                 if (menuItemValue == 1) {
                                   print("silindi");
-                                  _urunSilme(data);
+                                  showDialog(
+                                   // useSafeArea: true,
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text("İlanı kaldır"),
+                                          content: Text(
+                                              "İlanı kaldırmak istiyor musunuz?"),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text("Vazgeç")),
+                                            TextButton(
+                                                onPressed: () {
+                                                  _urunSilme(data);
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('Kaldır'))
+                                          ],
+                                        );
+                                      });
                                 }
                                 if (menuItemValue == 2) {
                                   print("güncellendi");

@@ -299,12 +299,33 @@ class _MessageDetailState extends State<MessageDetail> {
       itemBuilder: ((context) => [
             const PopupMenuItem(
               value: 1,
-              child: Text("Sohbeti sil"),
+              child: Text("Mesajları sil"),
             ),
           ]),
       onSelected: ((value) {
         if (value == 1) {
-          messageRemoved();
+          showDialog(
+              context: context,
+              builder: (value) {
+                return AlertDialog(
+                  title: Text("Mesajları sil"),
+                  content: Text("Mesajları silmek istediğinize emin misiniz?"),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Vazgeç")),
+                    TextButton(
+                      onPressed: () {
+                        messageRemoved();
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Sil'),
+                    )
+                  ],
+                );
+              });
         }
       }),
     );
