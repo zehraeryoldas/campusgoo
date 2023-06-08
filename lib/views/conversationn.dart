@@ -26,6 +26,17 @@ class _ConversationState extends State<Conversation> {
         .collection('chat_rooms')
         .doc(roomId)
         .update({'status': 0}).then((value) {
+      FirebaseFirestore.instance
+          .collection("chat_rooms")
+          .doc(roomId)
+          .collection("messages")
+          .where("from", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .get()
+          .then((QuerySnapshot querySnapshot) {
+        querySnapshot.docs.forEach((QueryDocumentSnapshot document) {
+          document.reference.update({'status': 0});
+        });
+      });
       print('Sohbet silindi!');
     }).catchError((error) {
       print('Sohbet silinirken hata oluştu: $error');
