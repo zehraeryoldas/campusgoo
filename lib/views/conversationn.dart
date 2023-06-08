@@ -15,11 +15,7 @@ class Conversation extends StatefulWidget {
 class _ConversationState extends State<Conversation> {
   String user = FirebaseAuth.instance.currentUser!.uid;
 
-  final Stream<QuerySnapshot> stream = FirebaseFirestore.instance
-      .collection('chat_rooms')
-      .where('users', arrayContains: FirebaseAuth.instance.currentUser!.uid)
-      .where("status", isEqualTo: 1)
-      .snapshots();
+
 
   void deleteChatRoom(String roomId) {
     FirebaseFirestore.instance
@@ -42,6 +38,12 @@ class _ConversationState extends State<Conversation> {
       print('Sohbet silinirken hata oluştu: $error');
     });
   }
+
+    final Stream<QuerySnapshot> stream = FirebaseFirestore.instance
+      .collection('chat_rooms')
+      .where('users', arrayContains: FirebaseAuth.instance.currentUser!.uid)
+      .where("status", isEqualTo: 1)
+      .snapshots();
 
   @override
   Widget build(BuildContext context) {
