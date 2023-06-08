@@ -95,8 +95,8 @@ class _favorilerimState extends State<favorilerim> {
               AsyncSnapshot<List<productModel>> snapshot) {
             // if (snapshot.connectionState == ConnectionState.waiting) {
             //   return CircularProgressIndicator(); // veri bekleniyor göstergesi
-            // } 
-             if (snapshot.hasError) {
+            // }
+            if (snapshot.hasError) {
               return Text('Bir hata oluştu: ${snapshot.error}');
             } else if (snapshot.hasData) {
               final favoriteProducts = snapshot.data!;
@@ -116,7 +116,6 @@ class _favorilerimState extends State<favorilerim> {
                     String description = product.description.toString();
                     String status = product.status.toString();
                     String location = product.location.toString();
-                    
 
                     print("????????");
                     print("******");
@@ -147,8 +146,8 @@ class _favorilerimState extends State<favorilerim> {
                           Container(
                             //color: Colors.red,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              border: Border.all(color: Colors.grey.shade300),
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(color: Colors.grey.shade300),
                                 image: DecorationImage(
                                     image: NetworkImage(
                                         product.images.toString()))),
@@ -196,9 +195,7 @@ class _favorilerimState extends State<favorilerim> {
                 );
               }
             }
-             else {
-              return Text('Bir şeyler ters gitti.');
-            }
+            return CircularProgressIndicator(color: mainColor.color,);
           },
         ),
       ),
