@@ -98,26 +98,26 @@ class _MessageDetailState extends State<MessageDetail> {
 
   var flp = FlutterLocalNotificationsPlugin();
 
-  Future<void> androidKurulum() async {
-    var androidAyari =
-        const AndroidInitializationSettings("@mipmap/ic_launcher");
-    var iosAyari = const DarwinInitializationSettings();
-    //ayarlar oluşturulduktan sonra birleştiriyorum
-    var kurulumAyari =
-        InitializationSettings(android: androidAyari, iOS: iosAyari);
-    await flp.initialize(kurulumAyari,
-        onDidReceiveNotificationResponse: bildirimSecilme);
-    //bu şekilde hem android hem ios için ayarlar verildi,
-    //birleştirildi kurulum gerçekleştrildi.
-  }
+  // Future<void> androidKurulum() async {
+  //   var androidAyari =
+  //       const AndroidInitializationSettings("@mipmap/ic_launcher");
+  //   var iosAyari = const DarwinInitializationSettings();
+  //   //ayarlar oluşturulduktan sonra birleştiriyorum
+  //   var kurulumAyari =
+  //       InitializationSettings(android: androidAyari, iOS: iosAyari);
+  //   await flp.initialize(kurulumAyari,
+  //       onDidReceiveNotificationResponse: bildirimSecilme);
+  //   //bu şekilde hem android hem ios için ayarlar verildi,
+  //   //birleştirildi kurulum gerçekleştrildi.
+  // }
 
-  Future<void> bildirimSecilme(
-      NotificationResponse notificationResponse) async {
-    var payLoad = notificationResponse.payload;
-    if (payLoad != null) {
-      print("Bildirim seçildi,$payLoad");
-    }
-  }
+  // Future<void> bildirimSecilme(
+  //     NotificationResponse notificationResponse) async {
+  //   var payLoad = notificationResponse.payload;
+  //   if (payLoad != null) {
+  //     print("Bildirim seçildi,$payLoad");
+  //   }
+  // }
 
   Future<void> bildirimGoster(String message) async {
     var androidBildirimDetay = const AndroidNotificationDetails(
@@ -130,7 +130,7 @@ class _MessageDetailState extends State<MessageDetail> {
     //bu iki yapıyı birleştirelim
     var bildirimDetay = NotificationDetails(
         android: androidBildirimDetay, iOS: iosBildirimDetay);
-    await androidKurulum(); // Bildirimleri başlat
+   // await androidKurulum(); // Bildirimleri başlat
     //mesajın gösterilmesi için başlık,içerik, detay bilgilerini verdik.
     await flp.show(0, widget.user!, message, bildirimDetay,
         payload: "payload içerik");
