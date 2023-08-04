@@ -165,8 +165,6 @@ class _ilanlarimState extends State<allAds> {
         }));
   }
 
-
-
   Positioned _favoributton(String postId) {
     return Positioned(
       left: 120,
