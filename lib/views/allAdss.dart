@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'allAdsDetail.dart';
+import 'adsDetail.dart';
 
 class allAds extends StatefulWidget {
   const allAds({
@@ -38,13 +38,13 @@ class _ilanlarimState extends State<allAds> {
         .collection('favorites')
         .get()
         .then((value) {
-      print('value length  ' + value.docs.length.toString());
-      value.docs.forEach((element) {
+      print('value length  ${value.docs.length}');
+      for (var element in value.docs) {
         setState(() {
           favorites.add(element.get('post_id'));
         });
         // print(element.get('post_id'));
-      });
+      }
     });
 
     // favorites.forEach((element) {
@@ -89,13 +89,13 @@ class _ilanlarimState extends State<allAds> {
         stream: _usersStream,
         builder: ((context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator(); // veri bekleniyor göstergesi
+            return const CircularProgressIndicator(); // veri bekleniyor göstergesi
           } else if (snapshot.hasError) {
             return Text('Bir hata oluştu: ${snapshot.error}');
           }
           return GridView.builder(
             itemCount: snapshot.data!.docs.length,
-            gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2),
             itemBuilder: (context, index) {
               DocumentSnapshot data = snapshot.data!.docs[index];
@@ -143,14 +143,14 @@ class _ilanlarimState extends State<allAds> {
                         ]),
                         Text(
                           data['name'],
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.black87,
                               fontSize: 18.0,
                               fontFamily: "RobotoCondensed"),
                         ),
                         Text(
-                          data['price'].toString() + "\u20ba",
-                          style: TextStyle(
+                          "${data['price']}\u20ba",
+                          style: const TextStyle(
                               color: mainColor.color,
                               fontSize: 18,
                               fontWeight: FontWeight.bold),
@@ -174,7 +174,7 @@ class _ilanlarimState extends State<allAds> {
               onPressed: () {
                 removeFromFavoritesCollection(postId);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.favorite,
                 color: mainColor.color,
               ))
@@ -182,7 +182,7 @@ class _ilanlarimState extends State<allAds> {
               onPressed: () {
                 addToFavoritesCollection(postId);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.favorite_border,
               ),
             ),
@@ -192,7 +192,6 @@ class _ilanlarimState extends State<allAds> {
 
 class _imagesContainer extends StatelessWidget {
   const _imagesContainer({
-    super.key,
     required this.data,
   });
 

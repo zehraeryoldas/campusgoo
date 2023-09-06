@@ -45,7 +45,7 @@ class _payPageState extends State<payPage> {
         _photo = File(pickedFile.path);
 
         //sonradan eklendi
-                //imagesController.text=_photo.toString();
+        //imagesController.text=_photo.toString();
 
         uploadFile();
       } else {
@@ -69,6 +69,7 @@ class _payPageState extends State<payPage> {
       }
     });
   }
+
   String? indirmeBaglantisi;
 
   Future uploadFile() async {
@@ -78,13 +79,14 @@ class _payPageState extends State<payPage> {
 
     try {
       final ref = firebase_storage.FirebaseStorage.instance
-          .ref(destination).child(FirebaseAuth.instance.currentUser!.uid)
+          .ref(destination)
+          .child(FirebaseAuth.instance.currentUser!.uid)
           .child('file/');
       ref.putFile(_photo!);
-      String url=await(await ref.putFile(_photo!)).ref.getDownloadURL();
+      String url = await (await ref.putFile(_photo!)).ref.getDownloadURL();
       setState(() {
-         indirmeBaglantisi=url; 
-      imagesController.text=url as String; 
+        indirmeBaglantisi = url;
+        imagesController.text = url;
       });
     } catch (e) {
       print('error occured');
@@ -129,7 +131,6 @@ class _payPageState extends State<payPage> {
                       RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0)))),
               onPressed: () {
-                
                 showMessage(context);
                 productService().addHedef(
                     nameController.text,
@@ -139,8 +140,6 @@ class _payPageState extends State<payPage> {
                     int.parse(priceController.text),
                     CategoryIdController.text,
                     locationIdController.text);
-                    
-                   
               },
               icon: Icon(Icons.save),
               label: Text("Kaydet")),
@@ -166,7 +165,6 @@ class _payPageState extends State<payPage> {
                 _category(),
                 _location(),
                 imageMethod(context),
-                
               ],
             ))
           ],
@@ -263,7 +261,7 @@ class _payPageState extends State<payPage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Text("Loading");
           }
-          return Container(
+          return SizedBox(
             width: double.infinity,
             child: DropdownButton<String>(
               hint: Text("Kategori"),
@@ -276,8 +274,8 @@ class _payPageState extends State<payPage> {
               value: dropdownValue,
               items: snapshot.data!.docs.map((DocumentSnapshot doc) {
                 return DropdownMenuItem(
-                  child: Text(doc['name']),
                   value: doc.reference.id.toString(),
+                  child: Text(doc['name']),
                 );
               }).toList(),
             ),
@@ -296,7 +294,7 @@ class _payPageState extends State<payPage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Text("Loading");
           }
-          return Container(
+          return SizedBox(
             width: double.infinity,
             child: DropdownButton<String>(
               hint: Text("Konum"),
@@ -309,9 +307,8 @@ class _payPageState extends State<payPage> {
               value: dropdownValue1,
               items: snapshot.data!.docs.map((DocumentSnapshot doc) {
                 return DropdownMenuItem(
-                  child: Text(doc['name']),
-                  //value: doc.reference.id.toString(),
                   value: doc['name'].toString(),
+                  child: Text(doc['name']),
                 );
               }).toList(),
             ),

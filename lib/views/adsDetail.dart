@@ -23,7 +23,7 @@ class AllAdsDetailPage extends StatefulWidget {
   final String? konum;
   final String? category;
 
-  AllAdsDetailPage({
+  const AllAdsDetailPage({
     super.key,
     this.postId,
     this.postUserId,
@@ -88,7 +88,7 @@ class _AllAdsDetailPageState extends State<AllAdsDetailPage> {
             _imageContainer(context),
             _myDivider(),
 
-            _myListtile("${widget.price} " + " \u20ba", "${widget.name}",
+            _myListtile("${widget.price} " " \u20ba", "${widget.name}",
                 const TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
             _myDivider(),
             const Text("    Detaylar",
